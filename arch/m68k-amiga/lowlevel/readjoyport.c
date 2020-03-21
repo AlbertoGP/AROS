@@ -51,6 +51,7 @@ static inline ULONG llPollGameCtrl(int port)
     int i;
     UBYTE cmask = (port == 0) ? (1 << 6) : (1 << 7);
 
+#if 0
     /* Set Pin 5 as output, shift mode */
     pot = custom->potinp;
     pot &= ~((port == 0) ? (3 << 8) : (3 << 12));
@@ -96,8 +97,9 @@ static inline ULONG llPollGameCtrl(int port)
     if (((joydat >> 8) ^ (joydat >> 9)) & 1) {
         bits |= JPF_JOY_UP;
     }
-
     return JP_TYPE_GAMECTLR | bits;
+#endif
+   return 0;
 }
 
 /*
