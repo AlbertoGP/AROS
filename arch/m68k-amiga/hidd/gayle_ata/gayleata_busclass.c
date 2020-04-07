@@ -1,5 +1,5 @@
 /*
-    Copyright © 2013-2020, The AROS Development Team. All rights reserved.
+    Copyright ï¿½ 2013-2020, The AROS Development Team. All rights reserved.
     $Id$
 
     Desc: A600/A1200/A4000 ATA HIDD
@@ -35,6 +35,7 @@ AROS_INTH1(IDE_Handler_A1200, struct ATA_BusData *, bus)
 
         port = bus->gaylebase;
         status = port[ata_Status * 4];
+        bus->ata_HandleIRQ(status, bus->irqData);
         /* Clear A600/A1200 IDE interrupt. (Stupid Gayle hardware)
          * Technically this should be done while interrupts are
          * disabled
@@ -44,7 +45,8 @@ AROS_INTH1(IDE_Handler_A1200, struct ATA_BusData *, bus)
             bug("[ATA:Gayle] ATA interrupt but BUSY flag set!?\n");
             return FALSE;
         }
-        bus->ata_HandleIRQ(status, bus->irqData);
+        //RONYBECK Put this back when finished and delete from above
+        //bus->ata_HandleIRQ(status, bus->irqData);
         return TRUE;
     }
     return FALSE;

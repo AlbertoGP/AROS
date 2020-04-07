@@ -247,6 +247,10 @@ static LONG PartitionGPTCheckPartitionTable(struct Library *PartitionBase, struc
     APTR blk;
     LONG res = 0;
 
+    bug("%s() started.\n", __FUNCTION__ );
+    bug("%s() Exiting immediately as a test.\n", __FUNCTION__ );
+    return 0;
+
     /* GPT can be placed only in the root of the disk */
     if (root->root)
         return 0;

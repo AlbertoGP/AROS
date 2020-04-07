@@ -60,7 +60,7 @@ OOP_Object *ATA__Root__New(OOP_Class *cl, OOP_Object *o, struct pRoot_New *msg)
 
         /* Wait for handshake */
         Wait(SIGF_SINGLE);
-        D(bug("[ATA:Controller] %s: Daemon task set to 0x%p\n", __func__, data->ata_Daemon));
+        D(bug("[ATA:Controller] %s: Daemon task set to 0x%p\n", __func__, data->ac_Daemon));
 
         AddTail(&ATABase->ata_Controllers, &data->ac_Node);
     }

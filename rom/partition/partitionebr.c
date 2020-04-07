@@ -39,6 +39,10 @@ union {
 struct PartitionType type;
 struct TagItem tags[] = {{PT_TYPE, (IPTR)&type}, {TAG_DONE, 0}};
 
+	bug("%s() started.\n", __FUNCTION__ );
+    bug("%s() Exiting immediately as a test.\n", __FUNCTION__ );
+    return 0;
+
     if ((root->de.de_SizeBlock << 2) > sizeof(sector))
     	return 0;
 

@@ -54,6 +54,8 @@
 
     bug("%s() started.\n", __FUNCTION__ );
 
+    bug("%s() Pointer to Partition Handle: 0x%x.\n", __FUNCTION__, (ULONG)root );
+
     bug("%s() Checking the partition table against list of supported tables.\n", __FUNCTION__ );
     pst = PartitionSupport;
     while (pst[0])

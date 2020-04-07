@@ -82,6 +82,10 @@ LONG MBRCheckPartitionTable(struct Library *PartitionBase, struct PartitionHandl
     struct rootblock *blk = buffer;
     LONG res = 0;
 
+    bug("%s() started.\n", __FUNCTION__ );
+    bug("%s() Exiting immediately as a test.\n", __FUNCTION__ );
+    return 0;
+
     if (readBlock(PartitionBase, root, 0, blk) == 0)
     {
         /* Check it doesn't look like a FAT boot sector */
@@ -104,11 +108,11 @@ LONG MBRCheckPartitionTable(struct Library *PartitionBase, struct PartitionHandl
         if (blk->u.bs.bpb_media < 0xF0)
             res = 1;
 
-	if (res)
-	{
-	    struct PCPartitionTable *pcpt = blk->u.mbr.pcpt;
+		if (res)
+		{
+			struct PCPartitionTable *pcpt = blk->u.mbr.pcpt;
 
-	    /* Check status bytes of all partition slots and block signature */
+			/* Check status bytes of all partition slots and block signature */
             if ((AROS_LE2WORD(blk->u.mbr.magic) != MBR_MAGIC) ||
                 (!MBR_STATUS_VALID(pcpt[0].status)) || (!MBR_STATUS_VALID(pcpt[1].status)) || 
             	(!MBR_STATUS_VALID(pcpt[2].status)) || (!MBR_STATUS_VALID(pcpt[3].status)))
