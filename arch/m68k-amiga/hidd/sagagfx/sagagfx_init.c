@@ -1,14 +1,15 @@
 /*
-    Copyright © 1995-2020, The AROS Development Team. All rights reserved.
+    Copyright ï¿½ 1995-2020, The AROS Development Team. All rights reserved.
     $Id$
 
-    Desc: SAGA Gfx Hidd for V4 AROS
+    Desc: SAGA Gfx Hidd for AROS
     Lang: english
 */
 
 #define __OOP_NOATTRBASES__
 
-#define DEBUG 0
+#define DEBUG 1
+#define D(x) x
 #include <aros/debug.h>
 
 #include <proto/exec.h>
@@ -85,6 +86,9 @@ static int SAGAGfx_Init(LIBBASETYPEPTR LIBBASE)
     /* Check if Vampire is detected */
     if (SAGA_Init() == FALSE)
         return FALSE;
+
+    /* Store Vampire board model */
+	xsd->model = (READ16(VREG_BOARD) >> 8);
 
     xsd->mempool = CreatePool(MEMF_FAST | MEMF_CLEAR, 32768, 16384);
     if (xsd->mempool == NULL)

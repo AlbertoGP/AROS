@@ -13,5 +13,6 @@
 #include <exec/types.h>
 
 void SAGA_SetPLL_V2(ULONG clock);
+void SAGA_LoadCLUT_V2(ULONG *palette, UWORD startIndex, UWORD count);
 
 #endif /* SAGAGFX_HW_V2_H */

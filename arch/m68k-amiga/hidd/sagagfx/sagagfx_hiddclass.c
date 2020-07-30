@@ -8,7 +8,8 @@
 
 #define __OOP_NOATTRBASES__
 
-#define DEBUG 0
+#define DEBUG 1
+#define D(x) x
 #include <aros/debug.h>
 
 #include <aros/asmcall.h>
@@ -45,8 +46,35 @@
         { aHidd_Sync_VSyncEnd,      vend    },  \
         { aHidd_Sync_VTotal,        vtotal  },  \
         { aHidd_Sync_Flags,         flags   },  \
-        { aHidd_Sync_Description,       (IPTR)descr},   \
+        { aHidd_Sync_Description,   (IPTR)descr},   \
         { TAG_DONE, 0UL }}
+
+#if 0
+#define MAKE_SYNC2(name,clock,hdisp,vdisp,flags,descr)   \
+    struct TagItem sync_ ## name[]={            \
+        { SAGA_SCREENMODE_TAG,    clock  },  \
+        { aHidd_Sync_HDisp,         hdisp   },  \
+        { aHidd_Sync_VDisp,         vdisp   },  \
+        { aHidd_Sync_Flags,         flags   },  \
+        { aHidd_Sync_Description,   (IPTR)descr},   \
+        { TAG_DONE, 0UL }}
+#else
+#define MAKE_SYNC2(name,clock,hdisp,hstart,hend,htotal,vdisp,vstart,vend,vtotal,flags,descr,sagamode)   \
+    struct TagItem sync_ ## name[]={            \
+        { aHidd_Sync_PixelClock,    clock*1000  },  \
+        { aHidd_Sync_HDisp,         hdisp   },  \
+        { aHidd_Sync_HSyncStart,    hstart  },  \
+        { aHidd_Sync_HSyncEnd,      hend    },  \
+        { aHidd_Sync_HTotal,        htotal  },  \
+        { aHidd_Sync_VDisp,         vdisp   },  \
+        { aHidd_Sync_VSyncStart,    vstart  },  \
+        { aHidd_Sync_VSyncEnd,      vend    },  \
+        { aHidd_Sync_VTotal,        vtotal  },  \
+        { aHidd_Sync_Flags,         flags   },  \
+		{ SAGA_SCREENMODE_TAG,		sagamode  },  \
+        { aHidd_Sync_Description,   (IPTR)descr},   \
+        { TAG_DONE, 0UL }}
+#endif
 
 enum {
     ML_PIXCLK,
@@ -169,12 +197,16 @@ OOP_Object *METHOD(SAGAGfx, Root, New)
 {
     struct TagItem *userSyncs = NULL;
 
+    D(bug("[SAGA] Root::New() called\n"));
+
+    /*
     MAKE_SYNC(320x240, 28375, 320, 688, 720, 800, 240, 483, 487, 494, 1, "SAGA:320x240");
     MAKE_SYNC(640x360, 28375, 640, 896, 984, 1088, 360, 504, 508, 518, 1, "SAGA:640x360");
     MAKE_SYNC(640x480, 28375, 640, 688, 720, 800, 480, 483, 487, 494, 1, "SAGA:640x480");
     MAKE_SYNC(720x400, 28320, 720, 738, 846, 900, 400, 412, 414, 449, 2, "SAGA:720x400");
     MAKE_SYNC(720x576, 28375, 720, 753, 817, 908, 576, 582, 586, 624, 1, "SAGA:720x576");
     MAKE_SYNC(800x600, 28375, 800, 848, 880, 960, 600, 603, 607, 615, 1, "SAGA:800x600");
+
 
     struct TagItem syncs[] = {
         { aHidd_Gfx_SyncTags,       (IPTR)sync_320x240 },
@@ -185,6 +217,27 @@ OOP_Object *METHOD(SAGAGfx, Root, New)
         { aHidd_Gfx_SyncTags,       (IPTR)sync_800x600 },
         { TAG_DONE, 0UL }
     };
+	*/
+
+    //Note: This driver re-uses the pixel clock for the vide resolution identifier
+    //MAKE_SYNC2(320x200, 28375, 320, 688, 720, 800, 200, 483, 487, 494, 1, "SAGA:320x200", SAGAV4_VIDEO_RES_320x200 );
+    MAKE_SYNC2(320x240, 28375, 320, 688, 720, 800, 240, 483, 487, 494, 1, "SAGA:320x240", SAGAV4_VIDEO_RES_320x240 );
+    MAKE_SYNC2(640x480, 28375, 640, 688, 720, 800, 480, 483, 487, 494, 1, "SAGA:640x480", SAGAV4_VIDEO_RES_640x480 );
+    //MAKE_SYNC2(320x200, SAGAV4_VIDEO_RES_320x200, 300, 200, 1, "SAGA:320x200");
+    //MAKE_SYNC2(320x240, SAGAV4_VIDEO_RES_320x240, 300, 240, 1, "SAGA:320x240");
+    //MAKE_SYNC2(640x400, SAGAV4_VIDEO_RES_640x400, 640, 400, 1, "SAGA:640x400");
+    //MAKE_SYNC2(640x480, SAGAV4_VIDEO_RES_640x480, 640, 480, 1, "SAGA:640x480");
+    //MAKE_SYNC2(640x512, SAGAV4_VIDEO_RES_640x512, 640, 512, 1, "SAGA:640x512");
+    //MAKE_SYNC2(960x540, SAGAV4_VIDEO_RES_960x540, 960, 540, 1, "SAGA:960x540");
+    struct TagItem syncs[] = {
+    	//{ aHidd_Gfx_SyncTags,       (IPTR)sync_320x200 },
+        { aHidd_Gfx_SyncTags,       (IPTR)sync_320x240 },
+        //{ aHidd_Gfx_SyncTags,       (IPTR)sync_640x400 },
+        { aHidd_Gfx_SyncTags,       (IPTR)sync_640x480 },
+        //{ aHidd_Gfx_SyncTags,       (IPTR)sync_960x540 },
+        { TAG_DONE, 0UL }
+    };
+
 
     struct TagItem pftags_32bpp[] = {
         { aHidd_PixFmt_RedShift,    8   }, /* 0 */
@@ -293,9 +346,12 @@ OOP_Object *METHOD(SAGAGfx, Root, New)
         read the driver specific tooltypes. Eventually we parse those needed.
     */
 
-    struct Library *IconBase = OpenLibrary("icon.library", 0);
-    XSD(cl)->useHWSprite = FALSE;
+    D(bug("[SAGA] %s Seting HW Spirte to true by default.\n", __FUNCTION__ ));
+    XSD(cl)->useHWSprite = TRUE;
 
+    //For now tool types are disabled
+#if TOOLTYPES_SUPPORTED
+    struct Library *IconBase = OpenLibrary("icon.library", 0);
     if (IconBase)
     {
         struct DiskObject *icon;
@@ -323,11 +379,13 @@ OOP_Object *METHOD(SAGAGfx, Root, New)
 
         CloseLibrary(IconBase);
     }
+#endif
 
     /*
         Hide HW Sprite now - it will be either shown later or not used at all,
         depending on the tooltype.
     */
+    D(bug("[SAGA] %s Hiding sprite.\n", __FUNCTION__ ));
     WRITE16(SAGA_VIDEO_SPRITEX, SAGA_VIDEO_MAXHV - 1);
     WRITE16(SAGA_VIDEO_SPRITEY, SAGA_VIDEO_MAXVV - 1);
 
@@ -335,15 +393,15 @@ OOP_Object *METHOD(SAGAGfx, Root, New)
     newmsg.attrList = saganewtags;
     msg = &newmsg;
 
-    D(bug("[SAGA] Root::New() called\n"));
-
+    /*
+    //User Syncs are no longer supported
     userSyncs = LoadExternalSyncs(cl);
 
     if (userSyncs) {
         syncs[6].ti_Tag = TAG_MORE;
         syncs[6].ti_Data = (IPTR)userSyncs;
     }
-
+    */
     o = (OOP_Object *)OOP_DoSuperMethod(cl, o, (OOP_Msg)msg);
     if (o)
     {
@@ -656,7 +714,7 @@ OOP_Object *METHOD(SAGAGfx, Hidd_Gfx, Show)
     if (data->visible)
     {
         D(bug("[SAGA] Hiding old bitmap\n"));
-//        OOP_SetAttrs(data->visible, tags);
+//      OOP_SetAttrs(data->visible, tags);
     }
 
     if (msg->bitMap)
@@ -668,7 +726,14 @@ OOP_Object *METHOD(SAGAGfx, Hidd_Gfx, Show)
         tags[0].ti_Data = TRUE;
 //        OOP_SetAttrs(msg->bitMap, tags);
 
+        WRITE16( SAGA_VIDEO_MODE, bmdata->hwregs.video_mode );
+        WRITE32( SAGA_VIDEO_BPLPTR, (ULONG)bmdata->VideoData );
+        if (bmdata->CLUT)
+            SAGA_LoadCLUT(bmdata->CLUT, 0, 256);
+        WRITE16(SAGA_VIDEO_BPLHMOD, 0);
 
+        /*
+        //Not relevant anymore
         WRITE16(SAGA_VIDEO_HPIXEL, bmdata->hwregs.hpixel);
         WRITE16(SAGA_VIDEO_HSSTRT, bmdata->hwregs.hsstart);
         WRITE16(SAGA_VIDEO_HSSTOP, bmdata->hwregs.hsstop);
@@ -683,6 +748,7 @@ OOP_Object *METHOD(SAGAGfx, Hidd_Gfx, Show)
 
         SAGA_SetPLL(bmdata->hwregs.pixelclock);
 
+
         if (bmdata->CLUT)
             SAGA_LoadCLUT(bmdata->CLUT, 0, 256);
 
@@ -690,8 +756,9 @@ OOP_Object *METHOD(SAGAGfx, Hidd_Gfx, Show)
 
         WRITE32(SAGA_VIDEO_BPLPTR, (ULONG)bmdata->VideoData);
         WRITE16(SAGA_VIDEO_BPLHMOD, 0);
+        */
 
-        WRITE16(SAGA_VIDEO_MODE, bmdata->hwregs.video_mode);
+        //WRITE16(SAGA_VIDEO_MODE, bmdata->hwregs.video_mode);
 
         {
             IPTR ptr = SAGA_VIDEO_SPRITEBPL;
@@ -724,7 +791,7 @@ OOP_Object *METHOD(SAGAGfx, Hidd_Gfx, Show)
             }
 
             for (int i=1; i < 4; i++) {
-                WRITE16(SAGA_VIDEO_SPRITECOL0 + (i << 1), XSD(cl)->cursor_pal[i]);
+                WRITE16(SAGA_VIDEO_SPRITECLUT + (i << 1), XSD(cl)->cursor_pal[i]);
             }
 
             if (XSD(cl)->cursor_visible)

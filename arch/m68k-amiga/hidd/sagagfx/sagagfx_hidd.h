@@ -46,6 +46,8 @@ struct SAGAGfx_staticdata
     APTR            mempool;
 
     BOOL            useHWSprite;
+	
+	UBYTE           model;
 //    struct SignalSemaphore  framebufferlock;
 };
 
@@ -54,6 +56,8 @@ struct SAGAGfxBase
     struct Library library;
     struct SAGAGfx_staticdata vsd;
 };
+
+#define SAGA_SCREENMODE_TAG 100
 
 #define XSD(cl)	(&((struct SAGAGfxBase *)cl->UserData)->vsd)
 

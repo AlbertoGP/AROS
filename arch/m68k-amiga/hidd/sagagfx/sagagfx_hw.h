@@ -39,6 +39,7 @@ static inline __attribute__((always_inline)) void WRITE32(IPTR a, ULONG b) { D(b
 #define VREG_BOARD_VCD32            0x08
 #define VREG_BOARD_Future           0x09
 
+
 /* SAGA Registers **********************************************************/
 
 #define VREG_BOARD                  0xDFF3FC
@@ -62,7 +63,7 @@ static inline __attribute__((always_inline)) void WRITE32(IPTR a, ULONG b) { D(b
 /* SAGA VIDEO definitions for V4 *******************************************/
 
 #define SAGA_VIDEO_PLLV4            0xDFF3F8
-#define SAGA_VIDEO_PLLWV4_MAGIC       0x24000000
+#define SAGA_VIDEO_PLLWV4_MAGIC     0x24000000
 
 #define SAGA_PIXELCLOCK             (28375000)
 
@@ -82,7 +83,6 @@ static inline __attribute__((always_inline)) void WRITE32(IPTR a, ULONG b) { D(b
 #define SAGA_VIDEO_SPRITEY          0xDFF1D2
 #define SAGA_VIDEO_SPRITECLUT       0xDFF3A2
 #define SAGA_VIDEO_SPRITEBPL        0xDFF800
-#define SAGA_VIDEO_SPRITECOL0		0xDFF3A0
 
 #define SAGA_VIDEO_BPLHMOD          0xDFF1E6
 #define SAGA_VIDEO_BPLPTR           0xDFF1EC
@@ -96,7 +96,17 @@ static inline __attribute__((always_inline)) void WRITE32(IPTR a, ULONG b) { D(b
 #define SAGA_VIDEO_VSSTOP           0xDFF30C
 #define SAGA_VIDEO_VTOTAL           0xDFF30E
 #define SAGA_VIDEO_HVSYNC           0xDFF310
+#define SAGA_VIDEO_CLUT_V4          0xDFF388
 #define SAGA_VIDEO_CLUT(x)          (0xDFF400 + (((x) & 0xFF) << 2))
+
+//Fixed Resolutions in hardware (V4 only)
+#define SAGAV4_VIDEO_RES_320x200 0x0100	/*scaling x2 x2*/
+#define SAGAV4_VIDEO_RES_320x240 0x0200	/*scaling x2 x2*/
+#define SAGAV4_VIDEO_RES_320x256 0x0300	/*scaling x2 x2*/
+#define SAGAV4_VIDEO_RES_640x400 0x0400	/*scaling x1 x1*/
+#define SAGAV4_VIDEO_RES_640x480 0x0500	/*scaling x1 x1*/
+#define SAGAV4_VIDEO_RES_640x512 0x0600	/*scaling x1 x1*/
+#define SAGAV4_VIDEO_RES_960x540 0x0700	/*scaling x1 x1*/
 
 #define SAGA_VIDEO_FORMAT_AMIGA     0x0000
 #define SAGA_VIDEO_FORMAT_CLUT8     0x0001
@@ -118,8 +128,8 @@ static inline __attribute__((always_inline)) void WRITE32(IPTR a, ULONG b) { D(b
 
 #define SAGA_BYTESWAP (SAGA_VIDEO_FORMAT_LE << SAGA_VIDEO_FORMAT_ENDIAN)
 
-#define SAGA_VIDEO_MODE_FORMAT(x)   (((x) & 0xff) << 0)
-#define SAGA_VIDEO_MODE_DBLSCN(x)   (((x) & 0xff) << 8)
+#define SAGA_VIDEO_MODE_FORMAT(x)   (((x) & 0xFF) << 0)
+#define SAGA_VIDEO_MODE_DBLSCN(x)   (((x) & 0xFF) << 8)
 
 #define SAGA_CLUT_ENTRY_VALID       (1UL << 31)
 

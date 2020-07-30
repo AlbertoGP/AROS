@@ -6,7 +6,7 @@
     Lang: english
 */
 
-#define DEBUG 0
+#define DEBUG 1
 
 #include <aros/debug.h>
 
@@ -21,35 +21,34 @@ void SAGA_SetPLL(ULONG clock)
 {
 	UBYTE model = (READ16(VREG_BOARD) >> 8);
 	
-	switch (model)
-	{
-		case VREG_BOARD_V4:
-		case VREG_BOARD_V4SA:
-			// V4 VIDEO PLL METHOD
-			SAGA_SetPLL_V4(clock);
-			break;
-		default:
-			// V2 VIDEO PLL METHOD
-			SAGA_SetPLL_V2(clock);
-			break;
+	switch (model) {
+	case VREG_BOARD_V4:
+	case VREG_BOARD_V4SA:
+		// V4 VIDEO PLL METHOD
+		SAGA_SetPLL_V4(clock);
+		break;
+	default:
+		// V2 VIDEO PLL METHOD
+		SAGA_SetPLL_V2(clock);
+		break;
 	}
 }
 
 void SAGA_LoadCLUT(ULONG *palette, UWORD startIndex, UWORD count)
 {
-    if (palette)
-    {
-        if(startIndex > 255)
-            return;
-
-        if(startIndex + count > 256)
-            count = 256 - startIndex;
-
-        for (int i=0; i < count; i++)
-        {
-            WRITE32(SAGA_VIDEO_CLUT(startIndex + i), palette[startIndex + i]);
-        }
-    }
+	UBYTE model = (READ16(VREG_BOARD) >> 8);
+	
+	switch (model) {
+	case VREG_BOARD_V4:
+	case VREG_BOARD_V4SA:
+		// V4 VIDEO CLUT METHOD
+		SAGA_LoadCLUT_V4(palette, startIndex, count);
+		break;
+	default:
+		// V2 VIDEO CLUT METHOD
+		SAGA_LoadCLUT_V2(palette, startIndex, count);
+		break;
+	}
 }
 
 /* Attempts to detect SAGA. */

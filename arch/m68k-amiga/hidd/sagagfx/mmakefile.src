@@ -15,6 +15,7 @@ SAGA_HIDD_SOURCES := \
         sagagfx_onbitmap
 
 # USER_CFLAGS += -m68020
+USER_CFLAGS += -DDEBUG
 
 %build_module mmake=hidd-m68k-sagagfx \
   modname=sagagfx modtype=hidd \

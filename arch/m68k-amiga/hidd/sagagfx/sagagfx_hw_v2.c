@@ -1,12 +1,12 @@
 /*
-    Copyright © 1995-2020, The AROS Development Team. All rights reserved.
+    Copyright ï¿½ 1995-2020, The AROS Development Team. All rights reserved.
      $Id$
 
     Desc: SAGA Gfx Hidd for AROS (V2)
     Lang: english
 */
 
-#define DEBUG 0
+#define DEBUG 1
 
 #include <aros/debug.h>
 
@@ -1219,6 +1219,23 @@ void SAGA_SetPLL_V2(ULONG clock)
 	
 	saga_pll_v2_clock_program(idx);
 	D(bug("[SAGA] Clock modified\n"));
+}
+
+void SAGA_LoadCLUT_V2(ULONG *palette, UWORD startIndex, UWORD count)
+{
+    if ( palette )
+    {
+        if ( startIndex > 255 )
+            return;
+
+        if ( startIndex + count > 256 )
+            count = 256 - startIndex;
+
+        for ( int i = 0; i < count; i++ )
+        {
+            WRITE32( SAGA_VIDEO_CLUT( startIndex + i ), palette[ startIndex + i ] );
+        }
+    }
 }
 
 

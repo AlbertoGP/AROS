@@ -2,7 +2,7 @@
 #define SAGAGFX_BITMAP_H
 
 /*
-    Copyright © 1995-2020, The AROS Development Team. All rights reserved.
+    Copyright ï¿½ 1995-2020, The AROS Development Team. All rights reserved.
     $Id$
 
     Desc: SAGAGfx header.
@@ -45,6 +45,7 @@ struct SAGAGfxBitmapData
     UBYTE       bitsperpix;
     ULONG       bytesperline;
     ULONG *     CLUT;           /* Hardware palette registers */
+    UWORD		resolutionMode;	/* Which resolution the screen should take */
     struct SAGARegs hwregs;     /* Hardware registers */
     BYTE        bpp;            /* Cached bits per pixel */
     BYTE        disp;           /* !=0 - displayable */
