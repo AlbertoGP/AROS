@@ -316,7 +316,7 @@ KDEVS   := timer input keyboard console trackdisk gameport audio ata cd
 KHNDLRS := cdrom con afs ram
 KHIDDS  := amigakbd amigamouse amigavideo ata_gayle bus gfx hiddclass keyboard mouse storage system p96gfx
 KRSRCS  := battclock processor task lddemon dosboot cia potgo disk \
-           misc shell shellcommands workbook wbtag card FileSystem vampire
+           misc shell shellcommands wbtag card FileSystem vampire
 KHOOKS  := alert romboot
 
 KOBJS_any := \
